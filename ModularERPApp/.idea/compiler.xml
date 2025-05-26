@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="EmployeeManagement" />
+      </profile>
+      <profile name="Annotation profile for StockManagementService" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+        </processorPath>
+        <module name="ModularErpSystemApp (1)" />
+        <module name="ModularErpSystemApp (2)" />
+        <module name="HumanResourcesService" />
+        <module name="PayrollService" />
+        <module name="StockManagementService" />
+        <module name="OrderService" />
+        <module name="FinancialService" />
+        <module name="EmployeeService" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="EmployeeManagement" target="1.5" />
+      <module name="EmployeeService (1)" target="17" />
+      <module name="EmployeeService (2)" target="17" />
+      <module name="ModularErpSystemApp" target="17" />
+      <module name="ModularErpSystemApp (3)" target="17" />
+      <module name="ModularErpSystemApp (4)" target="17" />
+      <module name="ModularErpSystemApp (5)" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="EmployeeManagement" options="" />
+      <module name="EmployeeService" options="-parameters" />
+      <module name="FinancialService" options="-parameters" />
+      <module name="HumanResourcesService" options="-parameters" />
+      <module name="ModularERPApp" options="-parameters" />
+      <module name="ModularErpSystemApp" options="-parameters" />
+      <module name="ModularErpSystemApp (1)" options="-parameters" />
+      <module name="ModularErpSystemApp (2)" options="-parameters" />
+      <module name="ModularErpSystemApp (3)" options="-parameters" />
+      <module name="ModularErpSystemApp (4)" options="-parameters" />
+      <module name="ModularErpSystemApp (5)" options="-parameters" />
+      <module name="OrderService" options="-parameters" />
+      <module name="PayrollService" options="-parameters" />
+      <module name="StockManagementService" options="-parameters" />
+    </option>
+  </component>
+</project>
