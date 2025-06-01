@@ -30,12 +30,12 @@ public class ProductController {
         return m_productService.findProductsByCategory(categoryId);
     }
 
-    @GetMapping("product/low-stock")
+    @GetMapping("product/lowstock")
     public List<Product> findLowStock(@RequestParam(name = "threshold") int threshold) {
         return m_productService.findLowStockProducts(threshold);
     }
 
-    @GetMapping("product/active")
+    @GetMapping("active")
     public List<Product> findActive() {
         return m_productService.findActiveProducts();
     }

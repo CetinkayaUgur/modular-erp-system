@@ -6,6 +6,7 @@ import com.cancikrikci.app.finance.repository.IFinancialRecordRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -40,5 +41,16 @@ public class FinancialRecordService {
     {
         return StreamSupport.stream(m_financialRecordRepository.findLessThan(amount, type.toString()).spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public List<FinancialRecord> findFinancialRecordsBetweenDate(LocalDate start, LocalDate end)
+    {
+        return StreamSupport.stream(m_financialRecordRepository.findBetweenDate(start, end).spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteRecordsById(int id)
+    {
+        m_financialRecordRepository.deleteById(id);
     }
 }

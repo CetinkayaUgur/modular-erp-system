@@ -1,5 +1,6 @@
 package com.cancikrikci.app.stock.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,10 +13,6 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_id")
     public int id;
-
-    @Column(name = "supplier_id")
-    public Integer supplierId;
-
     @Column(name = "purchase_date", nullable = false)
     public LocalDate purchaseDate;
 
@@ -25,6 +22,11 @@ public class Purchase {
     @Column(name = "description")
     public String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<PurchaseProduct> products;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "purchases", cascade = CascadeType.ALL)
+    public List<Product> products;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", nullable = false)
+    @JsonIgnore
+    public Supplier supplier;
 } 

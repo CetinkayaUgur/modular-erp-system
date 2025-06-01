@@ -1,7 +1,11 @@
 package com.cancikrikci.app.stock.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "suppliers")
@@ -24,5 +28,9 @@ public class Supplier {
     public String address;
 
     @Column(name = "registration_date")
-    public LocalDateTime registrationDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    public LocalDate registrationDate;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+    public List<Purchase> products;
 } 

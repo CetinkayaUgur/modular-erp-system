@@ -1,13 +1,12 @@
 package com.cancikrikci.app.finance.controller;
 
-import com.cancikrikci.app.finance.dto.BudgetDTO;
 import com.cancikrikci.app.finance.entity.FinancialRecord;
 import com.cancikrikci.app.finance.entity.FinancialRecordType;
-import com.cancikrikci.app.finance.service.BudgetService;
 import com.cancikrikci.app.finance.service.FinancialRecordService;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -36,9 +35,20 @@ public class FinancialRecordController {
     {
         return m_financialRecordService.findFinancialRecordsLessThan(amount, type);
     }
+    @GetMapping("between")
+    public List<FinancialRecord> findBetweenDate(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end)
+    {
+        return m_financialRecordService.findFinancialRecordsBetweenDate(start, end);
+    }
+
     @PostMapping("record/add")
     public FinancialRecord addFinancialRecord(@RequestBody FinancialRecord financialRecord)
     {
         return m_financialRecordService.addFinancialRecord(financialRecord);
+    }
+    @DeleteMapping("record/delete/{id}")
+    public void deleteById(@PathVariable int id)
+    {
+        m_financialRecordService.deleteRecordsById(id);
     }
 }

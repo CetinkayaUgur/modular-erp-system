@@ -21,6 +21,7 @@
         <module name="HumanResourcesService" />
         <module name="PayrollService" />
         <module name="StockManagementService" />
+        <module name="Security" />
         <module name="OrderService" />
         <module name="FinancialService" />
         <module name="EmployeeService" />
@@ -34,12 +35,16 @@
       <module name="ModularErpSystemApp (3)" target="17" />
       <module name="ModularErpSystemApp (4)" target="17" />
       <module name="ModularErpSystemApp (5)" target="17" />
+      <module name="SecurityService" target="17" />
+      <module name="SecurityServiceLib" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="EmployeeManagement" options="" />
       <module name="EmployeeService" options="-parameters" />
+      <module name="EmployeeService (1)" options="-parameters" />
+      <module name="EmployeeService (2)" options="-parameters" />
       <module name="FinancialService" options="-parameters" />
       <module name="HumanResourcesService" options="-parameters" />
       <module name="ModularERPApp" options="-parameters" />
@@ -51,6 +56,9 @@
       <module name="ModularErpSystemApp (5)" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="PayrollService" options="-parameters" />
+      <module name="Security" options="-parameters" />
+      <module name="SecurityService" options="-parameters" />
+      <module name="SecurityServiceLib" options="-parameters" />
       <module name="StockManagementService" options="-parameters" />
     </option>
   </component>

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IProductRepository extends CrudRepository<Product, Integer> {
+    List<Product> findAll();
     Iterable<Product> findByCategoryId(Integer categoryId);
     List<Product> findByStockQuantityLessThanEqual(int quantity);
     List<Product> findByIsActive(boolean isActive);

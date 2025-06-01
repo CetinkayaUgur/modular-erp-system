@@ -126,3 +126,4 @@ INSERT INTO performance_reviews (employee_id, date, score, comment) VALUES
 (3, '2025-06-12', 7, 'Reliable and disciplined'),
 (4, '2025-06-13', 6, 'Needs to improve teamwork'),
 (5, '2025-06-14', 9, 'Great contribution to recent projects');
+

@@ -1,5 +1,6 @@
 package com.cancikrikci.app.finance.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ public class FinancialRecord {
     public int id;
 
     @Column(name = "date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     public LocalDate date;
 
     @Column(name = "amount", nullable = false)

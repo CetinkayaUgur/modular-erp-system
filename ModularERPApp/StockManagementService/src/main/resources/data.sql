@@ -34,11 +34,11 @@ INSERT INTO product_categories (name, description) VALUES
 ('Home & Living', 'Furniture, decoration, and kitchenware');
 
 INSERT INTO products (category_id, name, description, stock_quantity, unit_price) VALUES
-(1, 'Smartphone', 'Latest model with high-end features', 50, 799.99),
+(3, 'Smartphone', 'Latest model with high-end features', 50, 799.99),
 (2, 'Organic Honey', '500g pure honey', 100, 25.50),
-(3, 'Pen Set', '10-piece premium quality pens', 200, 15.00),
-(4, 'Jeans', 'Comfortable and stylish denim jeans', 75, 49.90),
-(5, 'Sofa', 'Modern design with soft fabric', 10, 1200.00);
+(1, 'Pen Set', '10-piece premium quality pens', 200, 15.00),
+(5, 'Jeans', 'Comfortable and stylish denim jeans', 75, 49.90),
+(4, 'Sofa', 'Modern design with soft fabric', 10, 1200.00);
 
 INSERT INTO order_products (order_id, product_id, quantity, unit_price) VALUES
 (1, 1, 1, 799.99),
@@ -49,17 +49,17 @@ INSERT INTO order_products (order_id, product_id, quantity, unit_price) VALUES
 
 INSERT INTO purchases (supplier_id, purchase_date, total_amount, description) VALUES
 (1, '2025-06-10', 25000.00, 'Bulk electronics order'),
-(2, '2025-06-11', 5000.50, 'Food supplies'),
+(3, '2025-06-11', 5000.50, 'Food supplies'),
 (3, '2025-06-12', 1200.75, 'Stationery replenishment'),
 (4, '2025-06-13', 7500.30, 'Clothing inventory update'),
 (5, '2025-06-14', 9800.60, 'Furniture supply order');
 
 INSERT INTO purchase_products (purchase_id, product_id, quantity, unit_price) VALUES
 (1, 1, 10, 750.00),
-(2, 2, 50, 22.00),
-(3, 3, 100, 12.50),
-(4, 4, 30, 45.00),
-(5, 5, 5, 1150.00);
+(1, 2, 50, 22.00),
+(2, 3, 100, 12.50),
+(3, 4, 30, 45.00),
+(4, 5, 5, 1150.00);
 
 INSERT INTO financial_records (date, amount, type, source_type, source_id, description) VALUES
 ('2025-06-15', 799.99, 'income', 'order', 1, 'Smartphone sale'),

@@ -167,6 +167,7 @@ CREATE TABLE if not exists performance_reviews (
     comment TEXT
 );
 
+
 truncate table customers restart identity cascade;
 truncate table trainings restart identity cascade;
 truncate table suppliers restart identity cascade;

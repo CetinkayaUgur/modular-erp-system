@@ -11,7 +11,6 @@ public class PurchaseProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int id;
-
     @Column(name = "purchase_id", nullable = false)
     public int purchaseId;
 
@@ -27,8 +26,4 @@ public class PurchaseProduct {
     @Column(name = "subtotal", nullable = false)
     public BigDecimal subtotal;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id", insertable = false, updatable = false)
-    @JsonIgnore
-    public Purchase purchase;
 } 

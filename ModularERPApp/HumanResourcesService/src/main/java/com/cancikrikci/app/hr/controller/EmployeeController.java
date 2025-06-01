@@ -34,6 +34,11 @@ public class EmployeeController {
         return m_employeeService.findEmployeeByNationalId(id);
     }
 
+    @GetMapping("active")
+    public List<Employee> findByActivity(@RequestParam(name = "active") boolean activity)
+    {
+        return m_employeeService.findEmployeeByActivity(activity);
+    }
     @PostMapping("employee/save")
     public Employee save(@RequestBody Employee employee)
     {

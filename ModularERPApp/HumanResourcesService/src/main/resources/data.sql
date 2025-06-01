@@ -71,12 +71,12 @@ INSERT INTO financial_records (date, amount, type, source_type, source_id, descr
 INSERT INTO budget (id, total) VALUES
 (TRUE, 75000.00);
 
-INSERT INTO employees (first_name, last_name, national_id, phone, email, address, position, hire_date) VALUES
-('Alice', 'Johnson', '12345678901', '5551112233', 'alice@example.com', 'New York', 'Software Developer', '2023-01-10'),
-('Bob', 'Smith', '98765432109', '5552223344', 'bob@example.com', 'Los Angeles', 'Sales Representative', '2023-02-15'),
-('Charlie', 'Brown', '32165498745', '5553334455', 'charlie@example.com', 'Chicago', 'Accountant', '2022-11-20'),
-('Diana', 'Miller', '78932165478', '5554445566', 'diana@example.com', 'Houston', 'HR Specialist', '2022-10-05'),
-('Edward', 'Wilson', '15975385246', '5555556677', 'edward@example.com', 'Miami', 'Warehouse Manager', '2024-03-01');
+INSERT INTO employees (first_name, last_name, national_id, phone, email, address, position, hire_date, is_active) VALUES
+('Alice', 'Johnson', '12345678901', '5551112233', 'alice@example.com', 'New York', 'Software Developer', '2023-01-10', true),
+('Bob', 'Smith', '98765432109', '5552223344', 'bob@example.com', 'Los Angeles', 'Sales Representative', '2023-02-15', false),
+('Charlie', 'Brown', '32165498745', '5553334455', 'charlie@example.com', 'Chicago', 'Accountant', '2022-11-20', true),
+('Diana', 'Miller', '78932165478', '5554445566', 'diana@example.com', 'Houston', 'HR Specialist', '2022-10-05', false),
+('Edward', 'Wilson', '15975385246', '5555556677', 'edward@example.com', 'Miami', 'Warehouse Manager', '2024-03-01', true);
 
 INSERT INTO employee_salaries (employee_id, salary_date, paid_amount, description) VALUES
 (1, '2025-06-01', 5000.00, 'May salary paid'),

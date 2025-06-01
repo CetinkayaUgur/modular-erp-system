@@ -1,8 +1,11 @@
 package com.cancikrikci.app.stock.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -12,12 +15,8 @@ public class Product {
     @Column(name = "product_id")
     public int id;
 
-    @Column(name = "category_id")
-    public Integer categoryId;
-
-    @Column(name = "name", nullable = false, length = 150)
+    @Column(name = "name")
     public String name;
-
     @Column(name = "description")
     public String description;
 
@@ -34,5 +33,18 @@ public class Product {
     public boolean isActive;
 
     @Column(name = "added_date")
-    public LocalDateTime addedDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    public LocalDate addedDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
+    public ProductCategory category;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "purchase_products",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "purchase_id", referencedColumnName = "purchase_id", nullable = false)
+    )
+    @JsonIgnore
+    public List<Purchase> purchases;
 } 

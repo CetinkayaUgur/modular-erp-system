@@ -31,6 +31,10 @@ public class EmployeeService {
         return m_employeeRepository.findByNationalId(id);
     }
 
+    public List<Employee> findEmployeeByActivity(boolean activity)
+    {
+        return m_employeeRepository.findByIsActive(activity);
+    }
     public Employee addEmployee(Employee employee)
     {
         return m_employeeRepository.save(employee);
