@@ -1,0 +1,299 @@
+.finance-module {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px); /* Header yüksekliğini çıkarıyoruz */
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.finance-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.finance-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.finance-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+}
+
+.finance-table {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.finance-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.finance-table th,
+.finance-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.finance-table th {
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.finance-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.category {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.amount {
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.status-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-badge:hover {
+  transform: scale(1.05);
+}
+
+.status-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-width: 150px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.status-option:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.status-completed {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.status-pending {
+  background: rgba(255, 152, 0, 0.2);
+  color: #FF9800;
+}
+
+.status-cancelled {
+  background: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+}
+
+.status-scheduled {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196F3;
+}
+
+.detail-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.detail-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.details-row {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.report-details {
+  padding: 1rem;
+}
+
+.report-details h4 {
+  margin-bottom: 1rem;
+  color: #4CAF50;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detail-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: capitalize;
+}
+
+.detail-value {
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* Gelir Takibi için özel stiller */
+.income-tracking {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+/* Gider Takibi için özel stiller */
+.expense-tracking {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  color: white;
+}
+
+/* Skor Rozetleri */
+.score-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: white;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+.score-excellent {
+  background-color: rgba(76, 175, 80, 0.9);
+}
+
+.score-good {
+  background-color: rgba(139, 195, 74, 0.9);
+}
+
+.score-average {
+  background-color: rgba(255, 193, 7, 0.9);
+}
+
+.score-poor {
+  background-color: rgba(244, 67, 54, 0.9);
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+  .finance-module {
+    padding: 1rem;
+  }
+
+  .finance-header h2 {
+    font-size: 2rem;
+  }
+
+  .finance-header p {
+    font-size: 1rem;
+  }
+
+  .finance-table {
+    padding: 1rem;
+  }
+
+  .finance-table th,
+  .finance-table td {
+    padding: 0.75rem;
+  }
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.score-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.score-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.score-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+} 
