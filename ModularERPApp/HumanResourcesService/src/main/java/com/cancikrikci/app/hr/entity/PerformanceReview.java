@@ -21,5 +21,4 @@ public class PerformanceReview {
     public Integer score;
 
     @Column(name = "comment")
-    public String comment;
-} 
+    public String comment;}

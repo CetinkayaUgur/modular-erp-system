@@ -47,4 +47,7 @@ public class Product {
 
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     public List<Order> orders;
+
+    @Column(name = "username")
+    public String username;
 } 

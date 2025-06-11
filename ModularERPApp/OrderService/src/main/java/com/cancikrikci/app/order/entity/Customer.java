@@ -33,4 +33,7 @@ public class Customer {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     public List<Order> orders;
+
+    @Column(name = "username")
+    public String username;
 }

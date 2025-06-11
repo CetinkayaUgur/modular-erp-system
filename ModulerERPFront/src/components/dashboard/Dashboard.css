@@ -98,34 +98,25 @@
 
 .main-content {
   margin-top: 80px;
-  padding: 2rem 0;
+  padding: 2rem;
   flex: 1;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
-  width: 100%;
-  background-color: #2a2a2a;
-  border-radius: 0;
-  box-shadow: none;
 }
 
 .module-content {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 2rem 2rem;
-  border-radius: 8px;
-  box-shadow: none;
-  background: transparent;
-  flex-direction: column;
-  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .module-content h1 {
-  text-align: center;
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  margin-top: 0;
 }
 
 .welcome-content {
@@ -136,7 +127,7 @@
 
 .welcome-content h1 {
   font-size: 2.5rem;
-  color: #2196F3;
+  color: #333;
   margin-bottom: 1rem;
 }
 
@@ -184,16 +175,17 @@
 }
 
 /* Ana İçerik - Hizmetler */
+.main-content {
+  background-color: #2a2a2a;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
 .main-content h1 {
   margin-bottom: 2rem;
   font-size: 1.5rem;
-  height:100%;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
 
 .services-container {
   display: grid;
@@ -294,125 +286,4 @@
 
 .support-btn:hover {
   background-color: #357abd;
-}
-
-.logout-button {
-  padding: 0.75rem 1.5rem;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-left: 1rem;
-  transition: all 0.3s ease;
-}
-
-.logout-button:hover {
-  background: #c82333;
-}
-
-.sub-module-content {
-  padding: 2rem;
-  color: white;
-}
-
-.sub-module-content h2 {
-  margin-bottom: 2rem;
-  font-size: 2rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.module-placeholder {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.module-placeholder p {
-  font-size: 1.2rem;
-  color: inherit;
-  opacity: 0.8;
-}
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  margin-top: 1rem;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: white;
-}
-
-.data-table th,
-.data-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.data-table th {
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.1);
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-}
-
-.data-table tr:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-
-.durum-container {
-  position: relative;
-  display: inline-block;
-}
-
-.durum-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.durum-badge:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.durum-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 0.5rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 150px;
-  overflow: hidden;
-}
-
-.durum-option {
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #333;
-}
-
-.durum-option:hover {
-  background: #f5f5f5;
 } 

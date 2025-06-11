@@ -1,6 +1,6 @@
 package com.cancikrikci.security.service;
 
-import com.cancikrikci.security.entity.User;
+import com.cancikrikci.common.lib.entity.User;
 import com.cancikrikci.security.entity.UserDetailx;
 import com.cancikrikci.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -28,4 +28,5 @@ public class EmployeeStatus {
     @JoinColumn(name = "employee_id")
     @JsonIgnore
     public Employee employee;
+
 }

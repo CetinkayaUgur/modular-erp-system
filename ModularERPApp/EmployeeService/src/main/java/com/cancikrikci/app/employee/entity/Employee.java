@@ -48,6 +48,9 @@ public class Employee {
     public List<EmployeeInsurance> insurance;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<EmployeeStatus> status;
+
+    @Column(name = "username")
+    public String username;
 }
 
 /*

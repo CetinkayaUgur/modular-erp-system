@@ -1,179 +1,213 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import '../FinanceModule.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Table, Button, Modal, Form, Input, DatePicker, message } from 'antd';
+import './Training.css';
+import dayjs from 'dayjs';
+
+const { TextArea } = Input;
 
 const Training = () => {
-  const [trainings, setTrainings] = useState([
+  const [trainings, setTrainings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [editingId, setEditingId] = useState(null);
+
+  const columns = [
     {
-      id: 1,
-      employeeName: 'Ahmet Yılmaz',
-      trainingName: 'React.js Geliştirme',
-      trainer: 'Mehmet Öz',
-      startDate: '2024-03-01',
-      endDate: '2024-03-15',
-      status: 'Devam Ediyor',
-      trainingStatus: 'Aktif'
+      title: 'Eğitim Adı',
+      dataIndex: 'trainingName',
+      key: 'trainingName',
     },
     {
-      id: 2,
-      employeeName: 'Ayşe Demir',
-      trainingName: 'Proje Yönetimi',
-      trainer: 'Ali Kaya',
-      startDate: '2024-02-15',
-      endDate: '2024-03-15',
-      status: 'Tamamlandı',
-      trainingStatus: 'Başarılı'
+      title: 'Eğitim Tarihi',
+      dataIndex: 'trainingDate',
+      key: 'trainingDate',
+      render: (date) => new Date(date).toLocaleDateString('tr-TR')
     },
     {
-      id: 3,
-      employeeName: 'Mehmet Kaya',
-      trainingName: 'UI/UX Tasarım',
-      trainer: 'Zeynep Yıldız',
-      startDate: '2024-03-10',
-      endDate: '2024-04-10',
-      status: 'Planlandı',
-      trainingStatus: 'Beklemede'
-    }
-  ]);
+      title: 'Eğitmen',
+      dataIndex: 'trainer',
+      key: 'trainer',
+    },
+    {
+      title: 'Açıklama',
+      dataIndex: 'description',
+      key: 'description',
+      ellipsis: true,
+    },
+    {
+      title: 'İşlemler',
+      key: 'actions',
+      render: (_, record) => (
+        <>
+          <Button type="link" onClick={() => handleEdit(record)}>
+            Düzenle
+          </Button>
+          <Button type="link" danger onClick={() => handleDelete(record.id)}>
+            Sil
+          </Button>
+        </>
+      ),
+    },
+  ];
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  useEffect(() => {
+    fetchTrainings();
+  }, []);
 
-  const statusOptions = ['Planlandı', 'Devam Ediyor', 'Tamamlandı', 'İptal Edildi'];
-  const trainingStatusOptions = ['Beklemede', 'Aktif', 'Başarılı', 'Başarısız'];
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Tamamlandı':
-        return 'status-completed';
-      case 'Devam Ediyor':
-        return 'status-pending';
-      case 'Planlandı':
-        return 'status-scheduled';
-      case 'İptal Edildi':
-        return 'status-cancelled';
-      default:
-        return '';
-    }
-  };
-
-  const getTrainingStatusClass = (status) => {
-    switch (status) {
-      case 'Başarılı':
-        return 'status-completed';
-      case 'Aktif':
-        return 'status-pending';
-      case 'Beklemede':
-        return 'status-scheduled';
-      case 'Başarısız':
-        return 'status-cancelled';
-      default:
-        return '';
+  const fetchTrainings = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:50502/api/hr/trainings');
+      setTrainings(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Eğitimler yüklenirken bir hata oluştu.');
+      console.error('Error fetching trainings:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setTrainings(trainings.map(training => 
-      training.id === id ? { ...training, status: newStatus } : training
-    ));
-    setActiveDropdown(null);
+  const handleSubmit = async (values) => {
+    try {
+      const formData = {
+        ...values,
+        trainingDate: values.trainingDate.format('YYYY-MM-DD')
+      };
+
+      if (editingId) {
+        await axios.post('http://localhost:50502/api/hr/trainings/training/save', {
+          ...formData,
+          id: editingId
+        });
+        message.success('Eğitim başarıyla güncellendi');
+      } else {
+        await axios.post('http://localhost:50502/api/hr/trainings/training/save', formData);
+        message.success('Eğitim başarıyla oluşturuldu');
+      }
+      setIsModalVisible(false);
+      form.resetFields();
+      setEditingId(null);
+      fetchTrainings();
+    } catch (err) {
+      message.error('Bir hata oluştu');
+      console.error('Error submitting training:', err);
+    }
   };
 
-  const handleTrainingStatusChange = (id, newStatus) => {
-    setTrainings(trainings.map(training => 
-      training.id === id ? { ...training, trainingStatus: newStatus } : training
-    ));
-    setActiveDropdown(null);
+  const handleEdit = (record) => {
+    setEditingId(record.id);
+    form.setFieldsValue({
+      ...record,
+      trainingDate: record.trainingDate ? dayjs(record.trainingDate) : null
+    });
+    setIsModalVisible(true);
   };
 
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:50502/api/hr/trainings/training/delete/${id}`);
+      message.success('Eğitim başarıyla silindi');
+      fetchTrainings();
+    } catch (err) {
+      message.error('Silme işlemi başarısız oldu');
+      console.error('Error deleting training:', err);
+    }
   };
+
+  const handleAdd = () => {
+    setEditingId(null);
+    form.resetFields();
+    setIsModalVisible(true);
+  };
+
+  if (loading) {
+    return <div className="loading">Yükleniyor...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="hr-module finance-module"
-      style={{ background: 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)' }}
-    >
-      <div className="finance-header">
-        <h2>Eğitim Takibi</h2>
-        <p>Çalışan eğitimlerini buradan takip edebilirsiniz.</p>
+    <div className="training-module">
+      <h2>Eğitim Yönetimi</h2>
+      
+      <div className="trainings-details">
+        <div className="trainings-section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h3>Eğitim Listesi</h3>
+            <Button type="primary" onClick={handleAdd}>
+              Yeni Eğitim Ekle
+            </Button>
+          </div>
+          
+          <Table 
+            columns={columns} 
+            dataSource={trainings} 
+            rowKey="id"
+            pagination={{ pageSize: 10 }}
+          />
+        </div>
       </div>
-      <div className="finance-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Çalışan</th>
-              <th>Eğitim Adı</th>
-              <th>Eğitmen</th>
-              <th>Başlangıç</th>
-              <th>Bitiş</th>
-              <th>Eğitim Durumu</th>
-              <th>Durum</th>
-            </tr>
-          </thead>
-          <tbody>
-            {trainings.map((training) => (
-              <tr key={training.id}>
-                <td>{training.employeeName}</td>
-                <td><span className="category">{training.trainingName}</span></td>
-                <td>{training.trainer}</td>
-                <td className="date">{training.startDate}</td>
-                <td className="date">{training.endDate}</td>
-                <td>
-                  <div className="status-selector">
-                    <span 
-                      className={`status-badge ${getTrainingStatusClass(training.trainingStatus)}`}
-                      onClick={() => toggleDropdown(`training-${training.id}`)}
+
+      <Modal
+        title={editingId ? "Eğitimi Düzenle" : "Yeni Eğitim"}
+        open={isModalVisible}
+        onCancel={() => {
+          setIsModalVisible(false);
+          form.resetFields();
+          setEditingId(null);
+        }}
+        footer={null}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
+          <Form.Item
+            name="trainingName"
+            label="Eğitim Adı"
+            rules={[{ required: true, message: 'Lütfen eğitim adını giriniz' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="trainingDate"
+            label="Eğitim Tarihi"
+            rules={[{ required: true, message: 'Lütfen eğitim tarihini seçiniz' }]}
                     >
-                      {training.trainingStatus}
-                    </span>
-                    {activeDropdown === `training-${training.id}` && (
-                      <div className="status-dropdown">
-                        {trainingStatusOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="status-option"
-                            onClick={() => handleTrainingStatusChange(training.id, option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <div className="status-selector">
-                    <span 
-                      className={`status-badge ${getStatusClass(training.status)}`}
-                      onClick={() => toggleDropdown(`status-${training.id}`)}
-                    >
-                      {training.status}
-                    </span>
-                    {activeDropdown === `status-${training.id}` && (
-                      <div className="status-dropdown">
-                        {statusOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="status-option"
-                            onClick={() => handleStatusChange(training.id, option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <DatePicker style={{ width: '100%' }} format="DD.MM.YYYY" />
+          </Form.Item>
+
+          <Form.Item
+            name="trainer"
+            label="Eğitmen"
+            rules={[{ required: true, message: 'Lütfen eğitmen adını giriniz' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Açıklama"
+          >
+            <TextArea rows={4} />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {editingId ? 'Güncelle' : 'Oluştur'}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       </div>
-    </motion.div>
   );
 };
 

@@ -1,171 +1,232 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Modal, Form, Input, DatePicker, InputNumber, message } from 'antd';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import '../FinanceModule.css';
+import './Performance.css';
 
 const Performance = () => {
-  const [evaluations, setEvaluations] = useState([
+  const [performanceReviews, setPerformanceReviews] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    fetchPerformanceReviews();
+  }, []);
+
+  const fetchPerformanceReviews = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:50502/api/hr/PerformanceReviews/');
+      setPerformanceReviews(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Performans değerlendirmeleri yüklenirken bir hata oluştu');
+      console.error('Error fetching performance reviews:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      const formData = {
+        employeeId: values.employeeId,
+        date: values.date.format('YYYY-MM-DD'),
+        score: values.score,
+        comment: values.comment
+      };
+
+      if (editingId) {
+        await axios.post('http://localhost:50502/api/hr/PerformanceReviews/review/save', {
+          ...formData,
+          id: editingId
+        });
+        message.success('Performans değerlendirmesi başarıyla güncellendi');
+      } else {
+        await axios.post('http://localhost:50502/api/hr/PerformanceReviews/review/save', formData);
+        message.success('Performans değerlendirmesi başarıyla oluşturuldu');
+      }
+      setIsModalVisible(false);
+      form.resetFields();
+      setEditingId(null);
+      fetchPerformanceReviews();
+    } catch (err) {
+      message.error('Bir hata oluştu');
+      console.error('Error submitting performance review:', err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:50502/api/hr/PerformanceReviews/review/delete/${id}`);
+      message.success('Performans değerlendirmesi başarıyla silindi');
+      fetchPerformanceReviews();
+    } catch (err) {
+      message.error('Silme işlemi başarısız oldu');
+      console.error('Error deleting performance review:', err);
+    }
+  };
+
+  const columns = [
     {
-      id: 1,
-      employeeName: 'Ahmet Yılmaz',
-      position: 'Yazılım Geliştirici',
-      department: 'Bilgi Teknolojileri',
-      evaluationDate: '2024-03-01',
-      status: 'Tamamlandı',
-      evaluationStatus: 'Başarılı'
+      title: 'Çalışan ID',
+      dataIndex: 'employeeId',
+      key: 'employeeId',
     },
     {
-      id: 2,
-      employeeName: 'Ayşe Demir',
-      position: 'Proje Yöneticisi',
-      department: 'Proje Yönetimi',
-      evaluationDate: '2024-03-05',
-      status: 'Tamamlandı',
-      evaluationStatus: 'Çok Başarılı'
+      title: 'Tarih',
+      dataIndex: 'date',
+      key: 'date',
+      render: (date) => dayjs(date).format('DD.MM.YYYY')
     },
     {
-      id: 3,
-      employeeName: 'Mehmet Kaya',
-      position: 'UI/UX Tasarımcı',
-      department: 'Tasarım',
-      evaluationDate: '2024-03-10',
-      status: 'Beklemede',
-      evaluationStatus: 'Beklemede'
-    }
-  ]);
+      title: 'Puan',
+      dataIndex: 'score',
+      key: 'score',
+    },
+    {
+      title: 'Yorum',
+      dataIndex: 'comment',
+      key: 'comment',
+    },
+    {
+      title: 'İşlemler',
+      key: 'actions',
+      render: (_, record) => (
+        <>
+          <Button 
+            type="primary" 
+            onClick={() => {
+              setEditingId(record.id);
+              form.setFieldsValue({
+                employeeId: record.employeeId,
+                date: dayjs(record.date),
+                score: record.score,
+                comment: record.comment
+              });
+              setIsModalVisible(true);
+            }}
+            style={{ marginRight: 8 }}
+          >
+            Düzenle
+          </Button>
+          <Button 
+            danger 
+            onClick={() => handleDelete(record.id)}
+          >
+            Sil
+          </Button>
+        </>
+      ),
+    },
+  ];
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  if (loading) {
+    return <div className="loading">Yükleniyor...</div>;
+  }
 
-  const statusOptions = ['Beklemede', 'Tamamlandı', 'İptal Edildi'];
-  const evaluationStatusOptions = ['Beklemede', 'Başarılı', 'Çok Başarılı', 'Geliştirilmeli'];
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Tamamlandı':
-        return 'status-completed';
-      case 'Beklemede':
-        return 'status-pending';
-      case 'İptal Edildi':
-        return 'status-cancelled';
-      default:
-        return '';
-    }
-  };
-
-  const getEvaluationStatusClass = (status) => {
-    switch (status) {
-      case 'Çok Başarılı':
-        return 'status-completed';
-      case 'Başarılı':
-        return 'status-pending';
-      case 'Geliştirilmeli':
-        return 'status-cancelled';
-      case 'Beklemede':
-        return 'status-scheduled';
-      default:
-        return '';
-    }
-  };
-
-  const handleStatusChange = (id, newStatus) => {
-    setEvaluations(evaluations.map(evaluation => 
-      evaluation.id === id ? { ...evaluation, status: newStatus } : evaluation
-    ));
-    setActiveDropdown(null);
-  };
-
-  const handleEvaluationStatusChange = (id, newStatus) => {
-    setEvaluations(evaluations.map(evaluation => 
-      evaluation.id === id ? { ...evaluation, evaluationStatus: newStatus } : evaluation
-    ));
-    setActiveDropdown(null);
-  };
-
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="hr-module finance-module"
-      style={{ background: 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="performance-module"
     >
-      <div className="finance-header">
-        <h2>Çalışan Değerlendirme</h2>
-        <p>Çalışan performans değerlendirmelerini buradan takip edebilirsiniz.</p>
+      <div className="performance-header">
+        <h2>Performans Değerlendirme Yönetimi</h2>
+        <Button 
+          type="primary" 
+          onClick={() => {
+            setEditingId(null);
+            form.resetFields();
+            setIsModalVisible(true);
+          }}
+        >
+          Yeni Değerlendirme Ekle
+        </Button>
       </div>
-      <div className="finance-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Çalışan</th>
-              <th>Pozisyon</th>
-              <th>Departman</th>
-              <th>Değerlendirme Tarihi</th>
-              <th>Değerlendirme Durumu</th>
-              <th>Durum</th>
-            </tr>
-          </thead>
-          <tbody>
-            {evaluations.map((evaluation) => (
-              <tr key={evaluation.id}>
-                <td>{evaluation.employeeName}</td>
-                <td><span className="category">{evaluation.position}</span></td>
-                <td>{evaluation.department}</td>
-                <td className="date">{evaluation.evaluationDate}</td>
-                <td>
-                  <div className="status-selector">
-                    <span 
-                      className={`status-badge ${getEvaluationStatusClass(evaluation.evaluationStatus)}`}
-                      onClick={() => toggleDropdown(`eval-${evaluation.id}`)}
-                    >
-                      {evaluation.evaluationStatus}
-                    </span>
-                    {activeDropdown === `eval-${evaluation.id}` && (
-                      <div className="status-dropdown">
-                        {evaluationStatusOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="status-option"
-                            onClick={() => handleEvaluationStatusChange(evaluation.id, option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <div className="status-selector">
-                    <span 
-                      className={`status-badge ${getStatusClass(evaluation.status)}`}
-                      onClick={() => toggleDropdown(`status-${evaluation.id}`)}
-                    >
-                      {evaluation.status}
-                    </span>
-                    {activeDropdown === `status-${evaluation.id}` && (
-                      <div className="status-dropdown">
-                        {statusOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="status-option"
-                            onClick={() => handleStatusChange(evaluation.id, option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      <div className="performance-content">
+        <Table 
+          columns={columns} 
+          dataSource={performanceReviews} 
+          rowKey="id"
+          pagination={{ pageSize: 10 }}
+        />
       </div>
+
+      <Modal
+        title={editingId ? "Performans Değerlendirmesi Düzenle" : "Yeni Performans Değerlendirmesi"}
+        open={isModalVisible}
+        onCancel={() => {
+          setIsModalVisible(false);
+          form.resetFields();
+          setEditingId(null);
+        }}
+        footer={null}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          initialValues={{
+            score: 0
+          }}
+        >
+          <Form.Item
+            name="employeeId"
+            label="Çalışan ID"
+            rules={[{ required: true, message: 'Lütfen çalışan ID giriniz' }]}
+                    >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item
+            name="date"
+            label="Değerlendirme Tarihi"
+            rules={[{ required: true, message: 'Lütfen tarih seçiniz' }]}
+          >
+            <DatePicker style={{ width: '100%' }} format="DD.MM.YYYY" />
+          </Form.Item>
+
+          <Form.Item
+            name="score"
+            label="Puan"
+            rules={[{ required: true, message: 'Lütfen puan giriniz' }]}
+                          >
+            <InputNumber min={0} max={100} style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item
+            name="comment"
+            label="Yorum"
+            rules={[{ required: true, message: 'Lütfen yorum giriniz' }]}
+                    >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+              {editingId ? 'Güncelle' : 'Kaydet'}
+            </Button>
+            <Button onClick={() => {
+              setIsModalVisible(false);
+              form.resetFields();
+              setEditingId(null);
+            }}>
+              İptal
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </motion.div>
   );
 };

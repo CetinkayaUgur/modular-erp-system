@@ -8,7 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="EmployeeManagement" />
       </profile>
-      <profile name="Annotation profile for StockManagementService" enabled="true">
+      <profile name="Annotation profile for Security" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -20,11 +20,12 @@
         <module name="ModularErpSystemApp (2)" />
         <module name="HumanResourcesService" />
         <module name="PayrollService" />
+        <module name="CommonLib" />
         <module name="StockManagementService" />
         <module name="Security" />
         <module name="OrderService" />
-        <module name="FinancialService" />
         <module name="EmployeeService" />
+        <module name="FinancialService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -41,6 +42,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CommonLib" options="-parameters" />
       <module name="EmployeeManagement" options="" />
       <module name="EmployeeService" options="-parameters" />
       <module name="EmployeeService (1)" options="-parameters" />

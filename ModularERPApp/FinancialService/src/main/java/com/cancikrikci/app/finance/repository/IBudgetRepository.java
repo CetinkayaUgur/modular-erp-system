@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 
 @Repository
-public interface IBudgetRepository extends CrudRepository<Budget, Boolean> {
-    Budget findById(boolean id);
+public interface IBudgetRepository extends CrudRepository<Budget, Integer> {
+    Budget findByUsername(String username);
 }

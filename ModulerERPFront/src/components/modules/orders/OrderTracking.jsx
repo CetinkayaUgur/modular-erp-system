@@ -1,231 +1,300 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Modal, Form, Input, DatePicker, InputNumber, Select, message } from 'antd';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import '../FinanceModule.css';
+import './OrderTracking.css';
+
+const { Option } = Select;
+
+// API base URL'ini tanımla
+const API_BASE_URL = 'http://localhost:50503';
+
+// Axios instance oluştur
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
 
 const OrderTracking = () => {
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      orderNumber: 'SIP-2024-001',
-      customerName: 'ABC Şirketi',
-      orderDate: '2024-03-15',
-      deliveryDate: '2024-03-20',
-      totalAmount: '25.000 ₺',
-      status: 'Hazırlanıyor',
-      orderStatus: 'Onaylandı',
-      details: {
-        urunler: 'Laptop (5 adet), Monitör (3 adet)',
-        odemeDurumu: 'Ön Ödemeli',
-        teslimatAdresi: 'İstanbul, Kadıköy',
-        notlar: 'Özel paketleme talep edildi'
+  const [orders, setOrders] = useState([]);
+  const [customers, setCustomers] = useState([]); // Müşteri listesi için state
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    fetchOrders();
+    fetchCustomers(); // Müşteri listesini çek
+  }, []);
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      console.log('Siparişler yükleniyor...');
+      const response = await api.get('/api/orders');
+      console.log('Backend yanıtı:', response.data);
+      
+      if (response.data && Array.isArray(response.data)) {
+        setOrders(response.data);
+        message.success('Siparişler başarıyla yüklendi');
+      } else {
+        throw new Error('Geçersiz veri formatı');
       }
+    } catch (err) {
+      console.error('Hata detayları:', err);
+      setError('Siparişler yüklenirken bir hata oluştu');
+      message.error('Siparişler yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await api.get('/api/ord/customers');
+      setCustomers(response.data);
+    } catch (err) {
+      console.error('Müşteriler yüklenirken hata:', err);
+      message.error('Müşteriler yüklenirken bir hata oluştu');
+    }
+  };
+
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    try {
+      const formData = {
+        ...values,
+        orderDate: values.orderDate.format('YYYY-MM-DD'),
+        customer: { id: values.customerId }
+      };
+
+      if (editingId) {
+        const dataToSend = {
+          ...formData,
+          id: editingId
+        };
+        await api.post('/api/orders/order/save', dataToSend);
+        message.success('Sipariş başarıyla güncellendi');
+      } else {
+        await api.post('/api/orders/order/save', formData);
+        message.success('Sipariş başarıyla eklendi');
+      }
+      
+      setIsModalVisible(false);
+      form.resetFields();
+      setEditingId(null);
+      await fetchOrders();
+    } catch (err) {
+      console.error('Sipariş kaydedilirken hata:', err);
+      message.error('İşlem sırasında bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/api/orders/order/delete/${id}`);
+      message.success('Sipariş başarıyla silindi');
+      fetchOrders();
+    } catch (err) {
+      console.error('Sipariş silinirken hata:', err);
+      message.error('Silme işlemi başarısız oldu');
+    }
+  };
+
+  const columns = [
+    {
+      title: 'Sipariş No',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      id: 2,
-      orderNumber: 'SIP-2024-002',
-      customerName: 'XYZ Ltd.',
-      orderDate: '2024-03-16',
-      deliveryDate: '2024-03-22',
-      totalAmount: '18.500 ₺',
-      status: 'Kargoda',
-      orderStatus: 'Tamamlandı',
-      details: {
-        urunler: 'Yazıcı (2 adet), Toner (10 adet)',
-        odemeDurumu: 'Kredi Kartı',
-        teslimatAdresi: 'Ankara, Çankaya',
-        notlar: 'Sabah teslimatı talep edildi'
-      }
+      title: 'Sipariş Tarihi',
+      dataIndex: 'orderDate',
+      key: 'orderDate',
+      render: (date) => dayjs(date).format('DD.MM.YYYY')
     },
     {
-      id: 3,
-      orderNumber: 'SIP-2024-003',
-      customerName: 'DEF Holding',
-      orderDate: '2024-03-17',
-      deliveryDate: '2024-03-25',
-      totalAmount: '45.000 ₺',
-      status: 'Beklemede',
-      orderStatus: 'Onay Bekliyor',
-      details: {
-        urunler: 'Sunucu (1 adet), Network Ekipmanları',
-        odemeDurumu: 'Havale/EFT',
-        teslimatAdresi: 'İzmir, Karşıyaka',
-        notlar: 'Kurulum hizmeti talep edildi'
-      }
-    }
-  ]);
+      title: 'Toplam Tutar',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      render: (amount) => `₺${amount.toLocaleString('tr-TR')}`
+    },
+    {
+      title: 'Durum',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Açıklama',
+      dataIndex: 'description',
+      key: 'description',
+      ellipsis: true,
+    },
+    {
+      title: 'İşlemler',
+      key: 'actions',
+      render: (_, record) => (
+        <>
+          <Button 
+            type="primary" 
+            onClick={() => {
+              setEditingId(record.id);
+              form.setFieldsValue({
+                ...record,
+                orderDate: dayjs(record.orderDate),
+                customerId: record.customer?.id // Müşteri ID'sini forma ata
+              });
+              setIsModalVisible(true);
+            }}
+            style={{ marginRight: 8 }}
+          >
+            Düzenle
+          </Button>
+          <Button 
+            danger 
+            onClick={() => handleDelete(record.id)}
+          >
+            Sil
+          </Button>
+        </>
+      ),
+    },
+  ];
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [expandedOrder, setExpandedOrder] = useState(null);
+  if (loading) {
+    return <div className="loading">Yükleniyor...</div>;
+  }
 
-  const statusOptions = ['Beklemede', 'Hazırlanıyor', 'Kargoda', 'Tamamlandı', 'İptal Edildi'];
-  const orderStatusOptions = ['Onay Bekliyor', 'Onaylandı', 'Reddedildi', 'İptal Edildi'];
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Tamamlandı':
-        return 'status-completed';
-      case 'Hazırlanıyor':
-        return 'status-pending';
-      case 'Kargoda':
-        return 'status-scheduled';
-      case 'Beklemede':
-        return 'status-pending';
-      case 'İptal Edildi':
-        return 'status-cancelled';
-      default:
-        return '';
-    }
-  };
-
-  const getOrderStatusClass = (status) => {
-    switch (status) {
-      case 'Onaylandı':
-        return 'status-completed';
-      case 'Onay Bekliyor':
-        return 'status-pending';
-      case 'Reddedildi':
-        return 'status-cancelled';
-      case 'İptal Edildi':
-        return 'status-cancelled';
-      default:
-        return '';
-    }
-  };
-
-  const handleStatusChange = (id, newStatus) => {
-    setOrders(orders.map(order => 
-      order.id === id ? { ...order, status: newStatus } : order
-    ));
-    setActiveDropdown(null);
-  };
-
-  const handleOrderStatusChange = (id, newStatus) => {
-    setOrders(orders.map(order => 
-      order.id === id ? { ...order, orderStatus: newStatus } : order
-    ));
-    setActiveDropdown(null);
-  };
-
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
-
-  const toggleExpand = (id) => {
-    setExpandedOrder(expandedOrder === id ? null : id);
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="finance-module"
-      style={{ background: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="order-module"
     >
-      <div className="finance-header">
+      <div className="order-header">
         <h2>Sipariş Takibi</h2>
-        <p>Aktif siparişleri buradan takip edebilirsiniz.</p>
+        <Button 
+          type="primary" 
+          onClick={() => {
+            console.log('Yeni Sipariş Ekle butonuna tıklandı.');
+            setEditingId(null);
+            form.resetFields();
+            setIsModalVisible(true);
+          }}
+        >
+          Yeni Sipariş Ekle
+        </Button>
       </div>
-      <div className="finance-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Sipariş No</th>
-              <th>Müşteri</th>
-              <th>Sipariş Tarihi</th>
-              <th>Teslimat Tarihi</th>
-              <th>Tutar</th>
-              <th>Sipariş Durumu</th>
-              <th>Durum</th>
-              <th>Detay</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <React.Fragment key={order.id}>
-                <tr>
-                  <td>{order.orderNumber}</td>
-                  <td>{order.customerName}</td>
-                  <td>{order.orderDate}</td>
-                  <td>{order.deliveryDate}</td>
-                  <td className="amount">{order.totalAmount}</td>
-                  <td>
-                    <div className="status-selector">
-                      <span 
-                        className={`status-badge ${getOrderStatusClass(order.orderStatus)}`}
-                        onClick={() => toggleDropdown(`order-${order.id}`)}
-                      >
-                        {order.orderStatus}
-                      </span>
-                      {activeDropdown === `order-${order.id}` && (
-                        <div className="status-dropdown">
-                          {orderStatusOptions.map((option) => (
-                            <div
-                              key={option}
-                              className="status-option"
-                              onClick={() => handleOrderStatusChange(order.id, option)}
-                            >
-                              {option}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="status-selector">
-                      <span 
-                        className={`status-badge ${getStatusClass(order.status)}`}
-                        onClick={() => toggleDropdown(`status-${order.id}`)}
-                      >
-                        {order.status}
-                      </span>
-                      {activeDropdown === `status-${order.id}` && (
-                        <div className="status-dropdown">
-                          {statusOptions.map((option) => (
-                            <div
-                              key={option}
-                              className="status-option"
-                              onClick={() => handleStatusChange(order.id, option)}
-                            >
-                              {option}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <button 
-                      className="detail-button"
-                      onClick={() => toggleExpand(order.id)}
-                    >
-                      {expandedOrder === order.id ? 'Gizle' : 'Göster'}
-                    </button>
-                  </td>
-                </tr>
-                {expandedOrder === order.id && (
-                  <tr className="details-row">
-                    <td colSpan="8">
-                      <div className="report-details">
-                        <h4>Sipariş Detayları</h4>
-                        <div className="details-grid">
-                          {Object.entries(order.details).map(([key, value]) => (
-                            <div key={key} className="detail-item">
-                              <span className="detail-label">{key}:</span>
-                              <span className="detail-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+
+      <div className="order-content">
+        <Table 
+          columns={columns} 
+          dataSource={orders} 
+          rowKey="id"
+          pagination={{ pageSize: 10 }}
+        />
       </div>
+
+      <Modal
+        title={editingId ? "Sipariş Düzenle" : "Yeni Sipariş Ekle"}
+        open={isModalVisible}
+        onCancel={() => {
+          setIsModalVisible(false);
+          form.resetFields();
+          setEditingId(null);
+        }}
+        footer={null}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
+          <Form.Item
+            name="customerId"
+            label="Müşteri"
+            rules={[{ required: true, message: 'Lütfen müşteri seçiniz' }]}
+          >
+            <Select
+              placeholder="Müşteri seçiniz"
+            >
+              {customers.map(customer => (
+                <Option key={customer.id} value={customer.id}>
+                  {`${customer.firstName} ${customer.lastName || ''}`}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="orderDate"
+            label="Sipariş Tarihi"
+            rules={[{ required: true, message: 'Lütfen sipariş tarihini seçiniz' }]}
+          >
+            <DatePicker style={{ width: '100%' }} format="DD.MM.YYYY" />
+          </Form.Item>
+
+          <Form.Item
+            name="totalAmount"
+            label="Toplam Tutar"
+            rules={[{ required: true, message: 'Lütfen toplam tutarı giriniz' }]}
+          >
+            <InputNumber
+              style={{ width: '100%' }}
+              formatter={value => `₺ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={value => value.replace(/₺\s?|(,*)/g, '')}
+              min={0}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="status"
+            label="Durum"
+            rules={[{ required: true, message: 'Lütfen sipariş durumunu seçiniz' }]}
+          >
+            <Select placeholder="Durum seçiniz">
+              <Option value="Pending">Beklemede</Option>
+              <Option value="Processing">İşleniyor</Option>
+              <Option value="Completed">Tamamlandı</Option>
+              <Option value="Cancelled">İptal Edildi</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Açıklama"
+          >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+              {editingId ? 'Güncelle' : 'Kaydet'}
+            </Button>
+            <Button onClick={() => {
+              setIsModalVisible(false);
+              form.resetFields();
+              setEditingId(null);
+            }}>
+              İptal
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </motion.div>
   );
 };

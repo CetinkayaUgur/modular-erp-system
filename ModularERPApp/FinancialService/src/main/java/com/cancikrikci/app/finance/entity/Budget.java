@@ -1,5 +1,7 @@
 package com.cancikrikci.app.finance.entity;
 
+import com.cancikrikci.common.lib.entity.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -10,8 +12,11 @@ import java.time.LocalDate;
 public class Budget {
     @Id
     @Column(name = "id")
-    public boolean id = true;
+    public int id;
 
     @Column(name = "total", nullable = false)
     public BigDecimal total;
+
+    @Column(name = "username")
+    public String username;
 }

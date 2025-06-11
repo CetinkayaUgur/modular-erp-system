@@ -1,120 +1,132 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { motion } from 'framer-motion';
-import '../FinanceModule.css';
+import './Leaves.css';
 
 const Leaves = () => {
-  const [leaves, setLeaves] = useState([
-    {
-      id: 1,
-      date: '2024-03-20',
-      name: 'Ahmet Yılmaz',
-      type: 'Yıllık İzin',
-      duration: '5 gün',
-      status: 'Onaylandı'
-    },
-    {
-      id: 2,
-      date: '2024-03-19',
-      name: 'Ayşe Demir',
-      type: 'Hastalık İzni',
-      duration: '3 gün',
-      status: 'Beklemede'
-    },
-    {
-      id: 3,
-      date: '2024-03-18',
-      name: 'Mehmet Kaya',
-      type: 'Mazeret İzni',
-      duration: '1 gün',
-      status: 'Reddedildi'
-    }
-  ]);
+  const [leaves, setLeaves] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  useEffect(() => {
+    fetchLeaves();
+  }, []);
 
-  const statusOptions = ['Beklemede', 'Onaylandı', 'Reddedildi'];
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Onaylandı':
-        return 'status-completed';
-      case 'Beklemede':
-        return 'status-pending';
-      case 'Reddedildi':
-        return 'status-cancelled';
-      default:
-        return '';
+  const fetchLeaves = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get('http://localhost:50502/api/hr/leaves/');
+      setLeaves(response.data);
+    } catch (err) {
+      setError('İzinler yüklenirken bir hata oluştu: ' + err.message);
+      console.error('İzinler yüklenirken hata:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setLeaves(leaves.map(leave => 
-      leave.id === id ? { ...leave, status: newStatus } : leave
-    ));
-    setActiveDropdown(null);
+  const calculateLeaveStats = () => {
+    const totalLeaves = leaves.length;
+    const currentLeaves = leaves.filter(leave => {
+      const today = new Date();
+      const startDate = new Date(leave.startDate);
+      const endDate = new Date(leave.endDate);
+      return today >= startDate && today <= endDate;
+    }).length;
+
+    const leaveTypes = leaves.reduce((acc, leave) => {
+      acc[leave.leaveType] = (acc[leave.leaveType] || 0) + 1;
+      return acc;
+    }, {});
+
+    return {
+      totalLeaves,
+      currentLeaves,
+      leaveTypes
+    };
   };
 
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
+  const stats = calculateLeaveStats();
+
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="loading"
+      >
+        Yükleniyor...
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="hr-module finance-module"
-      style={{ background: 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)' }}
+      className="leaves-module"
     >
-      <div className="finance-header">
-        <h2>İzin Takibi</h2>
-        <p>Çalışan izinlerini buradan takip edebilir ve yönetebilirsiniz.</p>
+      <h2>İzin Yönetimi</h2>
+
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      <div className="leaves-summary">
+        <div className="summary-card">
+          <h4>Toplam İzin</h4>
+          <p className="amount">{stats.totalLeaves}</p>
+        </div>
+        <div className="summary-card">
+          <h4>Aktif İzinler</h4>
+          <p className="amount">{stats.currentLeaves}</p>
+        </div>
+        <div className="summary-card">
+          <h4>İzin Türleri</h4>
+          <div className="leave-types">
+            {Object.entries(stats.leaveTypes).map(([type, count]) => (
+              <div key={type} className="leave-type">
+                <span className="type-name">{type}</span>
+                <span className="type-count">{count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="finance-table">
+
+      <div className="leaves-details">
+        <div className="leaves-section">
+          <h3>İzin Listesi</h3>
         <table>
           <thead>
             <tr>
-              <th>Tarih</th>
-              <th>Ad Soyad</th>
+                <th>Çalışan ID</th>
               <th>İzin Türü</th>
-              <th>Süre</th>
-              <th>Durum</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Bitiş Tarihi</th>
+                <th>Açıklama</th>
             </tr>
           </thead>
           <tbody>
-            {leaves.map((leave) => (
+              {leaves.map(leave => (
               <tr key={leave.id}>
-                <td className="date">{leave.date}</td>
-                <td>{leave.name}</td>
-                <td><span className="category">{leave.type}</span></td>
-                <td>{leave.duration}</td>
-                <td>
-                  <div className="status-selector">
-                    <span 
-                      className={`status-badge ${getStatusClass(leave.status)}`}
-                      onClick={() => toggleDropdown(leave.id)}
-                    >
-                      {leave.status}
+                  <td>{leave.employeeId}</td>
+                  <td>
+                    <span className={`leave-type-badge ${leave.leaveType.toLowerCase()}`}>
+                      {leave.leaveType}
                     </span>
-                    {activeDropdown === leave.id && (
-                      <div className="status-dropdown">
-                        {statusOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="status-option"
-                            onClick={() => handleStatusChange(leave.id, option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
                 </td>
+                  <td>{new Date(leave.startDate).toLocaleDateString('tr-TR')}</td>
+                  <td>{new Date(leave.endDate).toLocaleDateString('tr-TR')}</td>
+                  <td>{leave.description}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </motion.div>
   );

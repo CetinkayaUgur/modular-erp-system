@@ -25,4 +25,5 @@ public class Leave {
 
     @Column(name = "description")
     public String description;
+
 } 

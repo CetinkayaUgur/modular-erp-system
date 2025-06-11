@@ -36,11 +36,10 @@ public class SecConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("api/register", "api/login").permitAll()
+                        .requestMatchers("api/register", "api/login", "api/user/activeuser").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-
                 .build();
     }
 

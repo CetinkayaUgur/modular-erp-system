@@ -13,6 +13,11 @@
 	<name>HumanResourcesService</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.cancikrikci</groupId>
+			<artifactId>CommonLib</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 </project>

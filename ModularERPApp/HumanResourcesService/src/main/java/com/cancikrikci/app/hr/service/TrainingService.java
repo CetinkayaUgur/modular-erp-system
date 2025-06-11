@@ -5,6 +5,7 @@ import com.cancikrikci.app.hr.entity.Training;
 import com.cancikrikci.app.hr.repository.ILeaveRepository;
 import com.cancikrikci.app.hr.repository.ITrainingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -12,10 +13,19 @@ import java.util.stream.StreamSupport;
 @Service
 public class TrainingService {
     private final ITrainingRepository m_trainingRepository;
+    private final RestTemplate m_restTemplate;
+    private final String m_url = "http://localhost:50505/api/user/activeuser";
 
-    public TrainingService(ITrainingRepository trainingRepository)
+
+    private String getUsername()
+    {
+        return m_restTemplate.getForObject(m_url, String.class);
+    }
+
+    public TrainingService(ITrainingRepository trainingRepository, RestTemplate restTemplate)
     {
         m_trainingRepository = trainingRepository;
+        m_restTemplate = restTemplate;
     }
 
     public List<Training> getAllTrainings()
@@ -30,6 +40,7 @@ public class TrainingService {
 
     public Training addTraining(Training training)
     {
+        training.employees.forEach(e -> e.username = getUsername());
         return m_trainingRepository.save(training);
     }
 

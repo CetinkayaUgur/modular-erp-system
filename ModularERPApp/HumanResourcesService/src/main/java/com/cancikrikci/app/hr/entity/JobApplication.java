@@ -28,4 +28,8 @@ public class JobApplication {
 
     @Column(name = "notes")
     public String notes;
+
+    @Column(name = "username")
+    public String username;
+
 } 

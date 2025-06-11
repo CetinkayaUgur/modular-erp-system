@@ -1,11 +1,162 @@
 .finance-module {
-  padding: 2rem;
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.finance-container {
   max-width: 1200px;
   margin: 0 auto;
-  min-height: calc(100vh - 64px); /* Header yüksekliğini çıkarıyoruz */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.finance-form-container {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin-right: 20px;
+}
+
+.finance-form-container h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.finance-form {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.submit-btn {
+  background: #3498db;
   color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background: #2980b9;
+}
+
+.finance-list-container {
+  flex: 1;
+}
+
+.finance-list-container h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.finance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
+}
+
+.finance-table th,
+.finance-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.finance-table th {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.finance-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.income-row {
+  background-color: #f0f7f0;
+}
+
+.expense-row {
+  background-color: #fff5f5;
+}
+
+.type-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.type-badge.income {
+  background-color: #e6f4ea;
+  color: #1e7e34;
+}
+
+.type-badge.expense {
+  background-color: #fbe9e7;
+  color: #d32f2f;
+}
+
+.amount-cell {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+  text-align: right;
+  color: #333;
+}
+
+.error-message {
+  color: #dc3545;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
 }
 
 .finance-header {
@@ -226,8 +377,18 @@
 
 /* Responsive Tasarım */
 @media (max-width: 768px) {
-  .finance-module {
-    padding: 1rem;
+  .finance-container {
+    padding: 10px;
+  }
+
+  .finance-table th,
+  .finance-table td {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .type-badge {
+    font-size: 0.8rem;
   }
 
   .finance-header h2 {
@@ -296,4 +457,560 @@
   font-size: 12px;
   font-weight: bold;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.filter-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-filter-form {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.date-filter-form .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.filter-btn:hover {
+  background: #2980b9;
+}
+
+.clear-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.clear-btn:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .date-filter-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .date-filter-form .form-group {
+    width: 100%;
+  }
+
+  .filter-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-btn,
+  .clear-btn {
+    flex: 1;
+  }
+}
+
+.budget-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.budget-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.budget-card h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.budget-card .amount {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.budget-card.income {
+  border-top: 4px solid #4CAF50;
+}
+
+.budget-card.expense {
+  border-top: 4px solid #f44336;
+}
+
+.budget-card.balance {
+  border-top: 4px solid #2196F3;
+}
+
+.budget-card.balance.positive {
+  border-top-color: #4CAF50;
+}
+
+.budget-card.balance.negative {
+  border-top-color: #f44336;
+}
+
+.budget-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.budget-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.budget-section h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .budget-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-card {
+    padding: 15px;
+  }
+
+  .budget-card .amount {
+    font-size: 1.3rem;
+  }
+
+  .budget-section {
+    padding: 15px;
+  }
+}
+
+.finance-module h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.filter-section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.date-inputs input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.date-inputs input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-button, .clear-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.filter-button {
+  background: #3498db;
+}
+
+.filter-button:hover {
+  background: #2980b9;
+}
+
+.clear-button {
+  background: #e74c3c;
+}
+
+.clear-button:hover {
+  background: #c0392b;
+}
+
+.budget-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.budget-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.budget-card:hover {
+  transform: translateY(-5px);
+}
+
+.budget-card h4 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.budget-card .amount {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  color: #2c3e50;
+}
+
+.budget-card.income .amount {
+  color: #27ae60;
+}
+
+.budget-card.expense .amount {
+  color: #c0392b;
+}
+
+.budget-card.balance .amount {
+  color: #2980b9;
+}
+
+.budget-card.balance.positive .amount {
+  color: #27ae60;
+}
+
+.budget-card.balance.negative .amount {
+  color: #c0392b;
+}
+
+.budget-card.income {
+  border-top: 4px solid #27ae60;
+}
+
+.budget-card.expense {
+  border-top: 4px solid #c0392b;
+}
+
+.budget-card.balance {
+  border-top: 4px solid #2980b9;
+}
+
+.budget-card.balance.positive {
+  border-top-color: #27ae60;
+}
+
+.budget-card.balance.negative {
+  border-top-color: #c0392b;
+}
+
+.budget-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.budget-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.budget-section h3 {
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.budget-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.budget-section th {
+  background: #f8f9fa;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.budget-section td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  color: #2c3e50;
+}
+
+.budget-section tr:hover {
+  background-color: #f8f9fa;
+}
+
+.error-message {
+  background: #fff3f3;
+  color: #c0392b;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ffcdd2;
+  font-weight: 500;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .finance-module {
+    padding: 15px;
+  }
+
+  .date-inputs {
+    flex-direction: column;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+  }
+
+  .budget-card {
+    padding: 20px;
+  }
+
+  .budget-card .amount {
+    font-size: 1.5rem;
+  }
+
+  .budget-section {
+    padding: 15px;
+  }
+
+  .budget-section th,
+  .budget-section td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+.total-balance-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 30px;
+  border: 2px solid #ecf0f1;
+}
+
+.total-balance-card h3 {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.total-balance-card .total-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.total-balance-card .total-amount.positive {
+  color: #27ae60;
+}
+
+.total-balance-card .total-amount.negative {
+  color: #c0392b;
+}
+
+.filter-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.filter-header {
+  margin-bottom: 20px;
+}
+
+.filter-header h3 {
+  color: #2c3e50;
+  font-size: 1.3rem;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.filter-header p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.date-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-input-group label {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.date-input-group input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2c3e50;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.date-input-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  background: white;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.filter-button, .clear-button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.filter-button {
+  background: #3498db;
+  color: white;
+}
+
+.filter-button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.clear-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.clear-button:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .total-balance-card {
+    padding: 20px;
+  }
+
+  .total-balance-card .total-amount {
+    font-size: 2rem;
+  }
+
+  .date-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+  }
+
+  .filter-button, .clear-button {
+    width: 100%;
+  }
 } 

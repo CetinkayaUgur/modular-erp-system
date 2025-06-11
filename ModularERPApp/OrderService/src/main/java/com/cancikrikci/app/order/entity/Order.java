@@ -41,4 +41,7 @@ public class Order {
     @JsonIgnore
     public Customer customer;
 
+    @Column(name = "username")
+    public String username;
+
 } 

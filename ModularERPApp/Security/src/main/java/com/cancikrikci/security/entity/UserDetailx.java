@@ -1,5 +1,6 @@
 package com.cancikrikci.security.entity;
 
+import com.cancikrikci.common.lib.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

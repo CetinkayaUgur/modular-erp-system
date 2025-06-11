@@ -30,4 +30,5 @@ public class EmployeeInsurance {
     @JoinColumn(name = "employee_id")
     @JsonIgnore
     public Employee employee;
+
 }

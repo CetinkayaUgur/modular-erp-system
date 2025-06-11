@@ -1,5 +1,6 @@
 package com.cancikrikci.app.finance.entity;
 
+import com.cancikrikci.common.lib.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -32,4 +33,7 @@ public class FinancialRecord {
 
     @Column(name = "description")
     public String description;
+
+    @Column
+    public String username;
 }

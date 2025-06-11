@@ -27,4 +27,5 @@ public class Training {
     @ManyToMany(mappedBy = "trainings", fetch = FetchType.LAZY)
     public List<Employee> employees;
 
+
 } 

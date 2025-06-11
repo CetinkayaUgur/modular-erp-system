@@ -1,38 +1,26 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = ({ onRegister }) => {
-  const { type } = useParams();
-  const isCompany = type === 'company';
+  const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
-    confirmPassword: '',
-    ...(isCompany 
-      ? {
-          companyName: '',
-          taxNumber: '',
-          address: ''
-        }
-      : {
-          firstName: '',
-          lastName: '',
-          phone: ''
-        }
-    )
+    confirmPassword: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
-    // Validasyon
-    if (!formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Lütfen tüm zorunlu alanları doldurun');
+    if (!formData.username || !formData.password || !formData.confirmPassword) {
+      setError('Lütfen tüm alanları doldurun');
       return;
     }
 
@@ -41,23 +29,32 @@ const Register = ({ onRegister }) => {
       return;
     }
 
-    if (isCompany) {
-      if (!formData.companyName || !formData.taxNumber) {
-        setError('Lütfen şirket bilgilerini eksiksiz doldurun');
-        return;
-      }
-    } else {
-      if (!formData.firstName || !formData.lastName) {
-        setError('Lütfen kişisel bilgilerinizi eksiksiz doldurun');
-        return;
-      }
-    }
+    try {
+      const response = await fetch('http://localhost:50505/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password
+        }),
+      });
 
-    // Gerçek uygulamada burada API çağrısı yapılacak
-    onRegister({
-      ...formData,
-      type: isCompany ? 'company' : 'user'
-    });
+      if (response.ok) {
+        const data = await response.json();
+        setSuccess('Kayıt işlemi başarılı! Giriş sayfasına yönlendiriliyorsunuz...');
+        // 2 saniye sonra login sayfasına yönlendir
+        setTimeout(() => {
+          navigate('/login', { state: { message: 'Kayıt işleminiz başarıyla tamamlandı. Giriş yapabilirsiniz.' } });
+        }, 2000);
+      } else {
+        const errorData = await response.text();
+        setError("Kayıt işlemi başarısız: " + errorData);
+      }
+    } catch (err) {
+      setError("Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.");
+    }
   };
 
   return (
@@ -68,72 +65,18 @@ const Register = ({ onRegister }) => {
       transition={{ duration: 0.5 }}
     >
       <div className="register-box">
-        <h2>{isCompany ? 'Şirket Kaydı' : 'Kullanıcı Kaydı'}</h2>
+        <h2>Kayıt Ol</h2>
         
         <form onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
           
-          {isCompany ? (
-            <>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Şirket Adı"
-                  value={formData.companyName}
-                  onChange={(e) => setFormData({...formData, companyName: e.target.value})}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Vergi Numarası"
-                  value={formData.taxNumber}
-                  onChange={(e) => setFormData({...formData, taxNumber: e.target.value})}
-                />
-              </div>
-              <div className="form-group">
-                <textarea
-                  placeholder="Adres"
-                  value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Ad"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Soyad"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="tel"
-                  placeholder="Telefon"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                />
-              </div>
-            </>
-          )}
-
           <div className="form-group">
             <input
-              type="email"
-              placeholder="E-posta"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              type="text"
+              placeholder="Kullanıcı Adı"
+              value={formData.username}
+              onChange={(e) => setFormData({...formData, username: e.target.value})}
             />
           </div>
           <div className="form-group">

@@ -1,0 +1,102 @@
+.training-module {
+  padding: 20px;
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  min-height: 100vh;
+}
+
+.training-module h2 {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.trainings-details {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trainings-section h3 {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #ff4d4f;
+  text-align: center;
+  padding: 20px;
+  font-weight: 600;
+  background: rgba(255, 77, 79, 0.1);
+  border-radius: 4px;
+  margin: 20px;
+}
+
+/* Ant Design bileşenleri için özel stiller */
+.ant-table {
+  background: white;
+  border-radius: 8px;
+}
+
+.ant-table-thead > tr > th {
+  background: #f0f2f5 !important;
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+}
+
+.ant-table-tbody > tr > td {
+  color: #1a1a1a !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #f5f5f5 !important;
+}
+
+.ant-btn-primary {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+.ant-btn-primary:hover {
+  background: #40a9ff !important;
+  border-color: #40a9ff !important;
+}
+
+.ant-modal-content {
+  border-radius: 8px;
+}
+
+.ant-form-item-label > label {
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+}
+
+.ant-input,
+.ant-picker,
+.ant-select-selector {
+  border-radius: 4px !important;
+}
+
+.ant-input:hover,
+.ant-picker:hover,
+.ant-select-selector:hover {
+  border-color: #40a9ff !important;
+}
+
+.ant-input:focus,
+.ant-picker-focused,
+.ant-select-focused .ant-select-selector {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+} 

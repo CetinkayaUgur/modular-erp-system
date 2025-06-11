@@ -1,235 +1,164 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './FinanceModule.css';
 
 const FinanceReports = () => {
-  const [reports, setReports] = useState([
-    {
-      id: 1,
-      reportName: 'Mart 2024 Gelir Raporu',
-      period: '2024 Mart',
-      type: 'Gelir',
-      amount: '150.000 ₺',
-      details: {
-        satisGeliri: '120.000 ₺',
-        hizmetGeliri: '25.000 ₺',
-        digerGelirler: '5.000 ₺'
-      },
-      status: 'Tamamlandı',
-      reportStatus: 'Onaylandı'
-    },
-    {
-      id: 2,
-      reportName: 'Mart 2024 Gider Raporu',
-      period: '2024 Mart',
-      type: 'Gider',
-      amount: '85.000 ₺',
-      details: {
-        personelGideri: '45.000 ₺',
-        ofisGideri: '20.000 ₺',
-        digerGiderler: '20.000 ₺'
-      },
-      status: 'Tamamlandı',
-      reportStatus: 'Onaylandı'
-    },
-    {
-      id: 3,
-      reportName: 'Nisan 2024 Gelir Raporu',
-      period: '2024 Nisan',
-      type: 'Gelir',
-      amount: '165.000 ₺',
-      details: {
-        satisGeliri: '130.000 ₺',
-        hizmetGeliri: '30.000 ₺',
-        digerGelirler: '5.000 ₺'
-      },
-      status: 'Hazırlanıyor',
-      reportStatus: 'Beklemede'
-    },
-    {
-      id: 4,
-      reportName: 'Nisan 2024 Gider Raporu',
-      period: '2024 Nisan',
-      type: 'Gider',
-      amount: '90.000 ₺',
-      details: {
-        personelGideri: '48.000 ₺',
-        ofisGideri: '22.000 ₺',
-        digerGiderler: '20.000 ₺'
-      },
-      status: 'Hazırlanıyor',
-      reportStatus: 'Beklemede'
-    }
-  ]);
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [dateRange, setDateRange] = useState({
+    startDate: '',
+    endDate: ''
+  });
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [expandedReport, setExpandedReport] = useState(null);
+  useEffect(() => {
+    fetchRecords();
+  }, []);
 
-  const statusOptions = ['Hazırlanıyor', 'Tamamlandı', 'İptal Edildi'];
-  const reportStatusOptions = ['Beklemede', 'Onaylandı', 'Reddedildi', 'İncelemede'];
+  const fetchRecords = async () => {
+    try {
+      console.log('Finansal kayıtlar isteniyor...');
+      let url = 'http://localhost:50501/api/finance/records';
+      
+      // Eğer tarih aralığı seçilmişse, filtreleme parametrelerini ekle
+      if (dateRange.startDate && dateRange.endDate) {
+        // Tarihleri YYYY-MM-DD formatında kullan
+        url = `http://localhost:50501/api/finance/records/between?start=${dateRange.startDate}&end=${dateRange.endDate}`;
+      }
 
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Tamamlandı':
-        return 'status-completed';
-      case 'Hazırlanıyor':
-        return 'status-pending';
-      case 'İptal Edildi':
-        return 'status-cancelled';
-      default:
-        return '';
+      console.log('İstek URL:', url);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Sunucu yanıtı:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Alınan veri:', data);
+        setRecords(data);
+      } else {
+        const errorText = await response.text();
+        console.error('Sunucu hatası:', errorText);
+        setError('Finansal kayıtlar yüklenirken bir hata oluştu: ' + errorText);
+      }
+    } catch (err) {
+      console.error('Bağlantı hatası detayları:', {
+        message: err.message,
+        name: err.name,
+        stack: err.stack
+      });
+      setError('Sunucuya bağlanılamadı: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getReportStatusClass = (status) => {
-    switch (status) {
-      case 'Onaylandı':
-        return 'status-completed';
-      case 'İncelemede':
-        return 'status-pending';
-      case 'Beklemede':
-        return 'status-scheduled';
-      case 'Reddedildi':
-        return 'status-cancelled';
-      default:
-        return '';
-    }
+  const handleDateRangeChange = (e) => {
+    const { name, value } = e.target;
+    setDateRange(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setReports(reports.map(report => 
-      report.id === id ? { ...report, status: newStatus } : report
-    ));
-    setActiveDropdown(null);
+  const handleFilter = (e) => {
+    e.preventDefault();
+    fetchRecords();
   };
 
-  const handleReportStatusChange = (id, newStatus) => {
-    setReports(reports.map(report => 
-      report.id === id ? { ...report, reportStatus: newStatus } : report
-    ));
-    setActiveDropdown(null);
+  const handleClearFilter = () => {
+    setDateRange({
+      startDate: '',
+      endDate: ''
+    });
+    fetchRecords();
   };
 
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
-
-  const toggleExpand = (id) => {
-    setExpandedReport(expandedReport === id ? null : id);
-  };
+  if (loading) return <div>Yükleniyor...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <motion.div
+      className="finance-module"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="finance-module"
-      style={{ background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)' }}
+      transition={{ duration: 0.5 }}
     >
-      <div className="finance-header">
-        <h2>Finansal Raporlama</h2>
-        <p>Aylık finansal raporları buradan takip edebilirsiniz.</p>
-      </div>
-      <div className="finance-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Rapor Adı</th>
-              <th>Dönem</th>
-              <th>Tür</th>
-              <th>Tutar</th>
-              <th>Rapor Durumu</th>
-              <th>Durum</th>
-              <th>Detay</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reports.map((report) => (
-              <React.Fragment key={report.id}>
+      <div className="finance-container">
+        <div className="finance-list-container">
+          <div className="filter-section">
+            <h3>Finansal Kayıtlar</h3>
+            <form onSubmit={handleFilter} className="date-filter-form">
+              <div className="form-group">
+                <label htmlFor="startDate">Başlangıç Tarihi</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={dateRange.startDate}
+                  onChange={handleDateRangeChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="endDate">Bitiş Tarihi</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={dateRange.endDate}
+                  onChange={handleDateRangeChange}
+                />
+              </div>
+              <div className="filter-buttons">
+                <button type="submit" className="filter-btn">Filtrele</button>
+                <button type="button" onClick={handleClearFilter} className="clear-btn">Filtreyi Temizle</button>
+              </div>
+            </form>
+          </div>
+          <div className="table-responsive">
+            <table className="finance-table">
+              <thead>
                 <tr>
-                  <td>{report.reportName}</td>
-                  <td><span className="category">{report.period}</span></td>
-                  <td>{report.type}</td>
-                  <td className="amount">{report.amount}</td>
-                  <td>
-                    <div className="status-selector">
-                      <span 
-                        className={`status-badge ${getReportStatusClass(report.reportStatus)}`}
-                        onClick={() => toggleDropdown(`report-${report.id}`)}
-                      >
-                        {report.reportStatus}
-                      </span>
-                      {activeDropdown === `report-${report.id}` && (
-                        <div className="status-dropdown">
-                          {reportStatusOptions.map((option) => (
-                            <div
-                              key={option}
-                              className="status-option"
-                              onClick={() => handleReportStatusChange(report.id, option)}
-                            >
-                              {option}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="status-selector">
-                      <span 
-                        className={`status-badge ${getStatusClass(report.status)}`}
-                        onClick={() => toggleDropdown(`status-${report.id}`)}
-                      >
-                        {report.status}
-                      </span>
-                      {activeDropdown === `status-${report.id}` && (
-                        <div className="status-dropdown">
-                          {statusOptions.map((option) => (
-                            <div
-                              key={option}
-                              className="status-option"
-                              onClick={() => handleStatusChange(report.id, option)}
-                            >
-                              {option}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <button 
-                      className="detail-button"
-                      onClick={() => toggleExpand(report.id)}
-                    >
-                      {expandedReport === report.id ? 'Gizle' : 'Göster'}
-                    </button>
-                  </td>
+                  <th>Tarih</th>
+                  <th>Tür</th>
+                  <th>Tutar</th>
+                  <th>Açıklama</th>
+                  <th>Kaynak Türü</th>
                 </tr>
-                {expandedReport === report.id && (
-                  <tr className="details-row">
-                    <td colSpan="7">
-                      <div className="report-details">
-                        <h4>Detaylı Bilgiler</h4>
-                        <div className="details-grid">
-                          {Object.entries(report.details).map(([key, value]) => (
-                            <div key={key} className="detail-item">
-                              <span className="detail-label">{key}:</span>
-                              <span className="detail-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+              </thead>
+              <tbody>
+                {records.map((record) => (
+                  <tr key={record.id} className={record.type === 'income' ? 'income-row' : 'expense-row'}>
+                    <td>{record.date}</td>
+                    <td>
+                      <span className={`type-badge ${record.type}`}>
+                        {record.type === 'income' ? 'Gelir' : 'Gider'}
+                      </span>
                     </td>
+                    <td className="amount-cell">
+                      {parseFloat(record.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL
+                    </td>
+                    <td>{record.description}</td>
+                    <td>{record.sourceType || '-'}</td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
 };
 
-export default FinanceReports; 
+export default FinanceReports;

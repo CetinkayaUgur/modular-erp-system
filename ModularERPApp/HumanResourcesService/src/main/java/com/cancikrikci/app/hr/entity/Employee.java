@@ -53,6 +53,8 @@ public class Employee {
     @JsonIgnore
     public List<Training> trainings;
 
+    @Column(name = "username")
+    public String username;
 }
 
 /*

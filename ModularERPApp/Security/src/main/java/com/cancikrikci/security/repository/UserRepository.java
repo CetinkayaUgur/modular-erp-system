@@ -1,6 +1,6 @@
 package com.cancikrikci.security.repository;
 
-import com.cancikrikci.security.entity.User;
+import com.cancikrikci.common.lib.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

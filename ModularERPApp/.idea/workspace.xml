@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="439abf34-d863-4e9d-990a-317a38e8c38f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EmployeeService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EmployeeService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EmployeeService/src/main/java/com/cancikrikci/app/employee/EmployeeServiceApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/EmployeeService/src/main/java/com/cancikrikci/app/employee/EmployeeServiceApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/FinanceServiceApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/FinanceServiceApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/controller/FinancialRecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/controller/FinancialRecordController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/entity/FinancialRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/entity/FinancialRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/repository/IFinancialRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/repository/IFinancialRecordRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/service/FinancialRecordService.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/service/FinancialRecordService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinancialService/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/FinancialService/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HumanResourcesService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/HumanResourcesService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HumanResourcesService/src/main/java/com/cancikrikci/app/hr/HumanResourcesServiceApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/HumanResourcesService/src/main/java/com/cancikrikci/app/hr/HumanResourcesServiceApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PayrollService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PayrollService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PayrollService/src/main/java/com/cancikrikci/app/PayrollServiceApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PayrollService/src/main/java/com/cancikrikci/app/payroll/PayrollServiceApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StockManagementService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/StockManagementService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="439abf34-d863-4e9d-990a-317a38e8c38f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,13 +22,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="useMavenConfig" value="true" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2xN7dvaxPYgP2Px1Q8VUEZsFkPH" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -58,11 +39,33 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.EmployeeServiceApp.executor": "Run",
+    "Application.FinanceServiceApp.executor": "Run",
+    "Application.HumanResourcesServiceApp.executor": "Run",
+    "Application.OrderServiceApp.executor": "Run",
+    "Application.PayrollServiceApp.executor": "Run",
+    "Application.Security.executor": "Run",
+    "Application.SecurityServiceApp.executor": "Run",
+    "Application.StockManagementServiceApp.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.employee.executor": "Run",
+    "Application.hr.executor": "Run",
+    "Application.payroll.executor": "Run",
+    "Application.security.executor": "Run",
+    "Application.stock.executor": "Run",
+    "Maven.CommonLib [install].executor": "Run",
+    "Maven.EmployeeService [clean].executor": "Run",
+    "Maven.EmployeeService [package].executor": "Run",
+    "Maven.OrderService [clean].executor": "Run",
+    "Maven.PayrollService [clean].executor": "Run",
+    "Maven.Security [clean].executor": "Run",
+    "Maven.Security [package].executor": "Run",
+    "Maven.StockManagementService [clean].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "C:/Users/Can/Desktop/birleştirme/ModularErpApp",
+    "last_opened_file_path": "C:/Users/Can/Desktop/yazmuhson/ModularErpApp/Security/src/main/resources",
     "onboarding.tips.debug.path": "C:/Users/Can/Desktop/ModularErpApp/ModularERPApp/src/main/java/org/example/Main.java",
     "settings.build.tools.auto.reload": "ALL",
     "settings.editor.selected.configurable": "MavenSettings"
@@ -73,25 +76,31 @@
       <recent name="com.cancikrikci.security.config" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Can\Desktop\yazmuhson\ModularErpApp\Security\src\main\resources" />
+      <recent name="C:\Users\Can\Desktop\yazmuhson\ModularErpApp\FinancialService\src\main\java\com\cancikrikci\app\finance\security" />
+      <recent name="C:\Users\Can\Desktop\yazmuhson\ModularErpApp" />
+      <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\Security\src\main\resources" />
       <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\StockManagementService\src\main\java\com\cancikrikci\app\stock" />
-      <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\PayrollService\src\main\java\com\cancikrikci\app\payroll" />
-      <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\OrderService\src\main\java\com\cancikrikci\app\order" />
-      <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\HumanResourcesService\src\main\java\com\cancikrikci\app\hr" />
-      <recent name="C:\Users\Can\Desktop\yazılımmuhcan\Modular-ERP-System\ModularErpApp\FinancialService\src\main\java\com\cancikrikci\app\finance" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Can\Desktop\yazmuhson\ModularErpApp\FinancialService\src\main\resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.cancikrikci.app.stock" />
+      <recent name="com.cancikrikci.app.payroll" />
+      <recent name="com.cancikrikci.app.order" />
+      <recent name="com.cancikrikci.app.hr" />
       <recent name="com.cancikrikci.app.employee" />
-      <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.cancikrikci.security" />
-      <recent name="com.cancikrikci.app.stock.controller" />
-      <recent name="com.cancikrikci.app.stock.service" />
-      <recent name="com.cancikrikci.app.stock.repository" />
-      <recent name="com.cancikrikci.app.stock.entity" />
+      <recent name="com.cancikrikci.app.stock.config" />
+      <recent name="com.cancikrikci.app.payroll.config" />
+      <recent name="com.cancikrikci.app.order.config" />
+      <recent name="com.cancikrikci.app.hr.config" />
+      <recent name="com.cancikrikci.app.employee.config" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.SecurityServiceApp">
+  <component name="RunManager" selected="Application.OrderServiceApp">
     <configuration name="FinanceServiceApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.cancikrikci.app.finance.FinanceServiceApp" />
       <module name="FinancialService" />
@@ -118,15 +127,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SecurityServiceApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="employee" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cancikrikci.app.employee.EmployeeServiceApp" />
+      <module name="EmployeeService" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="hr" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cancikrikci.app.hr.HumanResourcesServiceApp" />
+      <module name="HumanResourcesService" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="payroll" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cancikrikci.app.payroll.PayrollServiceApp" />
+      <module name="PayrollService" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="security" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.cancikrikci.security.SecurityServiceApp" />
       <module name="Security" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.cancikrikci.security.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="stock" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cancikrikci.app.stock.StockManagementServiceApp" />
+      <module name="StockManagementService" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -144,11 +175,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.security" />
+      <item itemvalue="Application.employee" />
+      <item itemvalue="Application.hr" />
+      <item itemvalue="Application.payroll" />
+      <item itemvalue="Application.stock" />
+      <item itemvalue="Application.FinanceServiceApp" />
+      <item itemvalue="Application.OrderServiceApp" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SecurityServiceApp" />
-        <item itemvalue="Application.FinanceServiceApp" />
         <item itemvalue="Application.OrderServiceApp" />
+        <item itemvalue="Application.FinanceServiceApp" />
       </list>
     </recent_temporary>
   </component>
@@ -170,6 +209,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
           <line>16</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/FinancialService/src/main/java/com/cancikrikci/app/finance/controller/FinancialRecordController.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

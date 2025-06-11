@@ -1,3 +1,9 @@
+CREATE TABLE if not exists users (
+    username TEXT UNIQUE PRIMARY KEY,
+    password TEXT,
+    role TEXT
+);
+
 CREATE TABLE if not exists customers (
     customer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
@@ -5,7 +11,8 @@ CREATE TABLE if not exists customers (
     phone VARCHAR(20),
     email VARCHAR(100),
     address TEXT,
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists trainings (
@@ -22,7 +29,8 @@ CREATE TABLE if not exists suppliers (
     phone VARCHAR(20),
     email VARCHAR(100),
     address TEXT,
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists orders (
@@ -30,14 +38,16 @@ CREATE TABLE if not exists orders (
     customer_id INT REFERENCES customers(customer_id) ON DELETE SET NULL,
     order_date DATE NOT NULL DEFAULT CURRENT_DATE,
     total_amount NUMERIC(10,2),
-    status VARCHAR(50) DEFAULT 'preparing', -- e.g., preparing, shipped, completed
-    description TEXT
+    status VARCHAR(50) DEFAULT 'preparing',
+    description TEXT,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists product_categories (
     category_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT
+    description TEXT,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists products (
@@ -45,11 +55,12 @@ CREATE TABLE if not exists products (
     category_id INT REFERENCES product_categories(category_id) ON DELETE SET NULL,
     name VARCHAR(150) NOT NULL,
     description TEXT,
-    unit VARCHAR(50) DEFAULT 'piece', -- e.g., kg, liter, piece
+    unit VARCHAR(50) DEFAULT 'piece',
     stock_quantity INT NOT NULL CHECK (stock_quantity >= 0),
     unit_price NUMERIC(10,2) NOT NULL CHECK (unit_price >= 0),
     is_active BOOLEAN DEFAULT TRUE,
-    added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists order_products (
@@ -66,7 +77,8 @@ CREATE TABLE if not exists purchases (
     supplier_id INT REFERENCES suppliers(supplier_id) ON DELETE SET NULL,
     purchase_date DATE NOT NULL DEFAULT CURRENT_DATE,
     total_amount NUMERIC(10,2),
-    description TEXT
+    description TEXT,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists purchase_products (
@@ -83,14 +95,17 @@ CREATE TABLE if not exists financial_records (
     date DATE DEFAULT CURRENT_DATE,
     amount NUMERIC(10,2) NOT NULL CHECK (amount >= 0),
     type VARCHAR(10) NOT NULL CHECK (type IN ('income', 'expense')),
-    source_type VARCHAR(50), -- e.g., order, purchase, salary, manual
+    source_type VARCHAR(50),
     source_id INT,
-    description TEXT
+    description TEXT,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists budget (
-    id BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (id),
-    total NUMERIC(12,2) NOT NULL DEFAULT 0
+    id SERIAL PRIMARY KEY, -- id'yi SERIAL olarak değiştiriyoruz, çünkü tekil bir anahtar olması gerekiyor
+    total NUMERIC(12,2) NOT NULL DEFAULT 0,
+    username TEXT UNIQUE NOT NULL, -- username'e UNIQUE constraint ekliyoruz
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists employees (
@@ -103,7 +118,8 @@ CREATE TABLE if not exists employees (
     address TEXT,
     position VARCHAR(100),
     hire_date DATE NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE
+    is_active BOOLEAN DEFAULT TRUE,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists employee_salaries (
@@ -127,7 +143,7 @@ CREATE TABLE if not exists employee_insurances (
 CREATE TABLE if not exists employee_statuses (
     status_id SERIAL PRIMARY KEY,
     employee_id INT REFERENCES employees(employee_id) ON DELETE CASCADE,
-    status VARCHAR(50) NOT NULL, -- e.g., active, on_leave, resigned
+    status VARCHAR(50) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE,
     description TEXT
@@ -139,8 +155,9 @@ CREATE TABLE if not exists job_applications (
     last_name VARCHAR(100),
     position VARCHAR(100),
     application_date DATE,
-    status VARCHAR(50), -- e.g., under_review, interview, rejected, hired
-    notes TEXT
+    status VARCHAR(50),
+    notes TEXT,
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists leaves (
@@ -187,6 +204,7 @@ truncate table job_applications restart identity cascade;
 truncate table leaves restart identity cascade;
 truncate table employee_trainings restart identity cascade;
 truncate table performance_reviews restart identity cascade;
+truncate table users restart identity cascade;
 
 
 
